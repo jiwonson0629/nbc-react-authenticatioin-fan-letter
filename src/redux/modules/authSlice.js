@@ -12,21 +12,19 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action) => {
+      console.log("받아온 데이터 값이다.", action.payload);
       const { accessToken, avatar, nickname, userId } = action.payload;
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("avatar", avatar);
       localStorage.setItem("nickname", nickname);
       localStorage.setItem("userId", userId);
-      console.log("accessToken", accessToken);
-      console.log("avatar", avatar);
-      console.log("nickname", nickname);
-      console.log("userId", userId);
       state.avatar = avatar;
       state.loginId = userId;
       state.isLogin = true;
       state.nickname = nickname;
     },
     logout: (state, action) => {
+      localStorage.clear();
       return { ...state, isLogin: false };
     },
     signUp: (state, action) => {
