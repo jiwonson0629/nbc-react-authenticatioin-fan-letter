@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import { useDispatch } from "react-redux";
-import { login, logout, signUp } from "redux/modules/authSlice";
+import { login, signUp } from "redux/modules/authSlice";
 import axios from "axios";
+import userApi from "../axios/userApi";
 
 function Login() {
   const isLogin = useSelector((state) => state.auth.isLogin);
@@ -14,6 +15,7 @@ function Login() {
   const [nickname, setNickname] = useState("");
   const dispatch = useDispatch();
   //    onClick 핸들러
+
   const idInputHandler = (e) => {
     setLoginId(e.target.value);
   };
@@ -35,7 +37,7 @@ function Login() {
       nickname,
     };
     try {
-      const res = await axios.post(
+      const res = await userApi.post(
         "https://moneyfulpublicpolicy.co.kr/register",
         newUser
       );
@@ -43,7 +45,7 @@ function Login() {
       setIsUser(!isUser);
     } catch (e) {
       const signUpRsf = e.response.data.message;
-      //   if(msg ==='이미 존재하는 유저 id입니다.')
+
       alert(signUpRsf);
     }
     // dispatch(signUp());
@@ -57,7 +59,7 @@ function Login() {
     };
 
     try {
-      const res = await axios.post(
+      const res = await userApi.post(
         "https://moneyfulpublicpolicy.co.kr/login",
         newLogin
       );

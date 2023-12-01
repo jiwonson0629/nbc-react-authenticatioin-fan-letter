@@ -3,11 +3,12 @@ import styled from "styled-components";
 import { v4 as uuid } from "uuid";
 import Button from "./common/Button";
 import { useDispatch } from "react-redux";
-import { addLetter } from "redux/modules/letters";
+import { __addLetters } from "redux/modules/letters";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 
 export default function AddForm() {
   const loginNickname = useSelector((state) => state.auth.nickname);
+  const userId = useSelector((state) => state.auth.loginId);
   const dispatch = useDispatch();
 
   const [nickname, setNickname] = useState("");
@@ -16,18 +17,19 @@ export default function AddForm() {
 
   const onAddLetter = (event) => {
     event.preventDefault();
-    if (!nickname || !content) return alert("닉네임과 내용은 필수값입니다.");
+    if (!content) return alert("닉네임과 내용은 필수값입니다.");
 
     const newLetter = {
       id: uuid(),
-      nickname,
+      nickname: loginNickname,
       content,
       avatar: null,
       writedTo: member,
       createdAt: new Date(),
+      userId,
     };
 
-    dispatch(addLetter(newLetter));
+    dispatch(__addLetters(newLetter));
     setNickname("");
     setContent("");
   };

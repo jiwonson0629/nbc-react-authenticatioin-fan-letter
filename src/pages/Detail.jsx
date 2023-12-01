@@ -1,6 +1,6 @@
 import Avatar from "components/common/Avatar";
 import Button from "components/common/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { getFormattedDate } from "util/date";
@@ -9,15 +9,25 @@ import { deleteLetter, editLetter } from "redux/modules/letters";
 
 export default function Detail() {
   const dispatch = useDispatch();
-  const letters = useSelector((state) => state.letters);
-
+  const letters = useSelector((state) => state.letters.letter);
+  // console.log("레터스다", letters);
   const [isEditing, setIsEditing] = useState(false);
   const [editingText, setEditingText] = useState("");
   const navigate = useNavigate();
   const { id } = useParams();
-  const { avatar, nickname, createdAt, writedTo, content } = letters.find(
-    (letter) => letter.id === id
-  );
+  const { isLoding, isError, letter } = useSelector((state) => state.letters);
+
+  useEffect(() => {
+    if (!isLoding) {
+      const findletter = letters?.find((letter) =>
+        console.log("돌아가는 레터다", letter.id === id)
+      );
+
+      setselectedletter(findletter);
+      console.log("필터레터다", findletter);
+    }
+  }, []);
+  const [selectedletter, setselectedletter] = useState();
 
   const onDeleteBtn = () => {
     const answer = window.confirm("정말로 삭제하시겠습니까?");
@@ -44,17 +54,17 @@ export default function Detail() {
       <DetailWrapper>
         <UserInfo>
           <AvatarAndNickname>
-            <Avatar src={avatar} size="large" />
-            <Nickname>{nickname}</Nickname>
+            <Avatar src={selectedletter?.avatar} size="large" />
+            <Nickname>{selectedletter?.nickname}</Nickname>
           </AvatarAndNickname>
-          <time>{getFormattedDate(createdAt)}</time>
+          <time>{getFormattedDate(selectedletter?.createdAt)}</time>
         </UserInfo>
-        <ToMember>To: {writedTo}</ToMember>
+        <ToMember>To: {selectedletter?.writedTo}</ToMember>
         {isEditing ? (
           <>
             <Textarea
               autoFocus
-              defaultValue={content}
+              defaultValue={selectedletter?.content}
               onChange={(event) => setEditingText(event.target.value)}
             />
             <BtnsWrapper>
@@ -64,7 +74,7 @@ export default function Detail() {
           </>
         ) : (
           <>
-            <Content>{content}</Content>
+            <Content>{selectedletter?.content}</Content>
             <BtnsWrapper>
               <Button text="수정" onClick={() => setIsEditing(true)} />
               <Button text="삭제" onClick={onDeleteBtn} />

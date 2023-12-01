@@ -1,23 +1,43 @@
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import LetterCard from "./LetterCard";
+import { useEffect, useState } from "react";
 
 export default function LetterList() {
   const activeMember = useSelector((state) => state.member);
-  const letters = useSelector((state) => state.letters);
+  const { isLoding, isError, letters } = useSelector((state) => state.letters);
+  console.log("레터스다", letters);
+  const [filteredLetter, setFilteredLetter] = useState();
+  console.log("필터드 레터다", filteredLetter);
+  console.log("맴버다", activeMember);
 
-  const filteredLetters = letters.filter(
-    (letter) => letter.writedTo === activeMember
-  );
+  // useEffect(() => {
+  //   if (!isLoding) {
+
+  //   }
+  // }, []);
+
+  if (isLoding) {
+    return <div>로딩중</div>;
+  }
+  if (isError) {
+    return <div>에러 발생</div>;
+  }
+  // const filteredLetters = letters[0]?.filter(
+  //   (letter) => letter.writedTo === activeMember
+  // );
+  // setFilteredLetter(filteredLetters);
+  // console.log("필터레터스다", filteredLetters);
+
   return (
     <ListWrapper>
-      {filteredLetters.length === 0 ? (
+      {filteredLetter?.length === 0 ? (
         <p>
           {activeMember}에게 남겨진 팬레터가 없습니다. 첫 번째 팬레터의 주인공이
           되보세요!
         </p>
       ) : (
-        filteredLetters.map((letter) => (
+        filteredLetter?.map((letter) => (
           <LetterCard key={letter.id} letter={letter} />
         ))
       )}
