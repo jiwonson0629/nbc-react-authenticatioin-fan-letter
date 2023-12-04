@@ -28,7 +28,6 @@ const authSlice = createSlice({
       return { ...state, isLogin: false };
     },
     signUp: (state, action) => {
-      //   console.log("액션이다", action);
       state.user.push(action.payload);
     },
   },

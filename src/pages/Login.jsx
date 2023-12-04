@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import { useDispatch } from "react-redux";
 import { login, signUp } from "redux/modules/authSlice";
-import axios from "axios";
 import userApi from "../axios/userApi";
 
 function Login() {
@@ -37,16 +36,13 @@ function Login() {
       nickname,
     };
     try {
-      const res = await userApi.post(
-        "https://moneyfulpublicpolicy.co.kr/register",
-        newUser
-      );
+      const res = await userApi.post("/register", newUser);
       console.log("회원가입 정보다", res);
       setIsUser(!isUser);
     } catch (e) {
-      const signUpRsf = e.response.data.message;
+      const signUpRes = e.response.data.message;
 
-      alert(signUpRsf);
+      alert(signUpRes);
     }
     // dispatch(signUp());
     // return setIsUser(!isUser);
@@ -59,17 +55,12 @@ function Login() {
     };
 
     try {
-      const res = await userApi.post(
-        "https://moneyfulpublicpolicy.co.kr/login",
-        newLogin
-      );
+      const res = await userApi.post("/login", newLogin);
       const resData = res.data;
       console.log("로그인 정보다", resData);
       dispatch(login(resData));
     } catch (e) {
       const { data } = e.response;
-      console.log("fldksahfasdfj", e);
-      //   if(msg ==='이미 존재하는 유저 id입니다.')
       alert(data.message);
     }
   };

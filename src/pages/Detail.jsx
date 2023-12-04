@@ -1,45 +1,42 @@
 import Avatar from "components/common/Avatar";
 import Button from "components/common/Button";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { getFormattedDate } from "util/date";
 import { useSelector, useDispatch } from "react-redux";
-import { deleteLetter, editLetter } from "redux/modules/letters";
+import { __deleteLetters, __editLetters } from "redux/modules/letters";
 
 export default function Detail() {
   const dispatch = useDispatch();
-  const letters = useSelector((state) => state.letters.letter);
-  // console.log("레터스다", letters);
   const [isEditing, setIsEditing] = useState(false);
   const [editingText, setEditingText] = useState("");
   const navigate = useNavigate();
   const { id } = useParams();
-  const { isLoding, isError, letter } = useSelector((state) => state.letters);
+  const { isLoding, isError, letters } = useSelector((state) => state.letters);
+  const LoginId = localStorage.getItem("userId");
+  console.log("어스에 저장된 유저 ID이다", LoginId);
+  if (isLoding) {
+    return <div>로딩중</div>;
+  }
+  if (isError) {
+    return <div>에러 발생</div>;
+  }
 
-  useEffect(() => {
-    if (!isLoding) {
-      const findletter = letters?.find((letter) =>
-        console.log("돌아가는 레터다", letter.id === id)
-      );
-
-      setselectedletter(findletter);
-      console.log("필터레터다", findletter);
-    }
-  }, []);
-  const [selectedletter, setselectedletter] = useState();
+  const findletter = letters?.find((letter) => letter.id === id);
 
   const onDeleteBtn = () => {
     const answer = window.confirm("정말로 삭제하시겠습니까?");
     if (!answer) return;
+    // 리렌더링 어케 하지?
+    dispatch(__deleteLetters(id));
 
-    dispatch(deleteLetter(id));
     navigate("/");
   };
   const onEditDone = () => {
     if (!editingText) return alert("수정사항이 없습니다.");
-
-    dispatch(editLetter({ id, editingText }));
+    console.log("아이디다 ", id);
+    dispatch(__editLetters({ id, editingText }));
     setIsEditing(false);
     setEditingText("");
   };
@@ -54,17 +51,17 @@ export default function Detail() {
       <DetailWrapper>
         <UserInfo>
           <AvatarAndNickname>
-            <Avatar src={selectedletter?.avatar} size="large" />
-            <Nickname>{selectedletter?.nickname}</Nickname>
+            <Avatar src={findletter?.avatar} size="large" />
+            <Nickname>{findletter?.nickname}</Nickname>
           </AvatarAndNickname>
-          <time>{getFormattedDate(selectedletter?.createdAt)}</time>
+          <time>{getFormattedDate(findletter?.createdAt)}</time>
         </UserInfo>
-        <ToMember>To: {selectedletter?.writedTo}</ToMember>
+        <ToMember>To: {findletter?.writedTo}</ToMember>
         {isEditing ? (
           <>
             <Textarea
               autoFocus
-              defaultValue={selectedletter?.content}
+              defaultValue={findletter?.content}
               onChange={(event) => setEditingText(event.target.value)}
             />
             <BtnsWrapper>
@@ -74,10 +71,16 @@ export default function Detail() {
           </>
         ) : (
           <>
-            <Content>{selectedletter?.content}</Content>
+            <Content>{findletter?.content}</Content>
             <BtnsWrapper>
-              <Button text="수정" onClick={() => setIsEditing(true)} />
-              <Button text="삭제" onClick={onDeleteBtn} />
+              {LoginId === findletter?.nickname ? (
+                <>
+                  <Button text="수정" onClick={() => setIsEditing(true)} />
+                  <Button text="삭제" onClick={onDeleteBtn} />
+                </>
+              ) : (
+                <></>
+              )}
             </BtnsWrapper>
           </>
         )}

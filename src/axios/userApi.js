@@ -6,7 +6,7 @@ export const instance = axios.create({
 instance.interceptors.request.use(
   // 요청을 보내기 전 수행되는 함수
   function (config) {
-    console.log("인터셉터 요청 성공!");
+    console.log("유저 인터셉터 요청 성공!");
     return config;
   },
 
@@ -26,7 +26,7 @@ instance.interceptors.response.use(
 
   // 오류응답을 내보내기 전 수행되는 함수
   function (error) {
-    console.log("인터셉트 응답 오류발생!");
+    console.log("유저 인터셉트 응답 오류발생!");
     return Promise.reject(error);
   }
 );

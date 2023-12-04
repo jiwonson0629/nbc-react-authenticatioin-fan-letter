@@ -6,7 +6,6 @@ import { __getLetters } from "redux/modules/letters";
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
-    console.log("app useEffect render");
     dispatch(__getLetters());
   }, []);
   return <Router />;
