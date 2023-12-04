@@ -5,7 +5,6 @@ import LetterCard from "./LetterCard";
 export default function LetterList() {
   const activeMember = useSelector((state) => state.member);
   const { isError, isLoding, letters } = useSelector((state) => state.letters);
-  console.log("레터스다", letters);
 
   if (isLoding) {
     return <div>로딩중</div>;

@@ -37,7 +37,6 @@ function Login() {
     };
     try {
       const res = await userApi.post("/register", newUser);
-      console.log("회원가입 정보다", res);
       setIsUser(!isUser);
     } catch (e) {
       const signUpRes = e.response.data.message;
@@ -57,7 +56,6 @@ function Login() {
     try {
       const res = await userApi.post("/login", newLogin);
       const resData = res.data;
-      console.log("로그인 정보다", resData);
       dispatch(login(resData));
     } catch (e) {
       const { data } = e.response;

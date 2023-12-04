@@ -15,7 +15,7 @@ export default function Detail() {
   const { id } = useParams();
   const { isLoding, isError, letters } = useSelector((state) => state.letters);
   const LoginId = localStorage.getItem("userId");
-  console.log("어스에 저장된 유저 ID이다", LoginId);
+
   if (isLoding) {
     return <div>로딩중</div>;
   }
@@ -35,7 +35,7 @@ export default function Detail() {
   };
   const onEditDone = () => {
     if (!editingText) return alert("수정사항이 없습니다.");
-    console.log("아이디다 ", id);
+
     dispatch(__editLetters({ id, editingText }));
     setIsEditing(false);
     setEditingText("");

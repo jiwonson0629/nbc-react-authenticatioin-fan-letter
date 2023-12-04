@@ -13,7 +13,7 @@ function Profile() {
   const userToken = localStorage.getItem("accessToken");
 
   const [editingNickname, setEditingNickname] = useState(auth.nickname);
-  console.log("가져온 어스다", auth);
+
   useEffect(() => {
     const getUserInfo = async () => {
       try {

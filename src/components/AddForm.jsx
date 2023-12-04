@@ -39,12 +39,6 @@ export default function AddForm() {
       <InputWrapper>
         <label>닉네임:</label>
         <h2>{loginNickname}</h2>
-        {/* <input
-          onChange={(event) => setNickname(event.target.value)}
-          value={nickname}
-          placeholder="최대 20글자까지 작성할 수 있습니다."
-          maxLength={20}
-        /> */}
       </InputWrapper>
       <InputWrapper>
         <label>내용:</label>

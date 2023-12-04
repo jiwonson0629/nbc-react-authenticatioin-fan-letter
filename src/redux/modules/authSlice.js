@@ -12,7 +12,6 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action) => {
-      console.log("받아온 데이터 값이다.", action.payload);
       const { accessToken, avatar, nickname, userId } = action.payload;
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("avatar", avatar);

@@ -7,7 +7,7 @@ import styled from "styled-components";
 
 export default function Home() {
   const letters = useSelector((state) => state.letters);
-  console.log("gha asdf", letters);
+
   return (
     <Container>
       <Header />

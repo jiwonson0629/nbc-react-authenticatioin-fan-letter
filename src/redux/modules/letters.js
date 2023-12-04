@@ -8,13 +8,9 @@ const initialState = {
   error: null,
 };
 
-//  2개의 input
-// 1.이름 : 크게 의미는 없음
-// 2. 함수: 비동기 요청을 위한
 export const __getLetters = createAsyncThunk(
   "getletters",
   async (payload, thunkAPI) => {
-    //수행하고 싶은 동작 : 레터를 추가하기
     try {
       const res = await api.get("/letters?_sort=createdAt&_order=desc");
       return thunkAPI.fulfillWithValue(res.data);
@@ -27,14 +23,11 @@ export const __getLetters = createAsyncThunk(
 export const __addLetters = createAsyncThunk(
   "addletters ",
   async (payload, thunkAPI) => {
-    //수행하고 싶은 동작 : 레터를 추가하기
     try {
       const res = await api.post("/letters", payload);
-      console.log("추가한 레터스 값이다", res);
       thunkAPI.dispatch(__getLetters());
       return thunkAPI.fulfillWithValue(res.data);
     } catch (error) {
-      console.log("추가한 레터스 오류다 ", error);
       return thunkAPI.rejectWithValue(error);
     }
   }
@@ -43,14 +36,11 @@ export const __addLetters = createAsyncThunk(
 export const __deleteLetters = createAsyncThunk(
   "deleteLetters ",
   async (payload, thunkAPI) => {
-    //수행하고 싶은 동작 : 레터를 추가하기
-    // console.log("삭제하고싶은 레터스 값이다", payload);
     try {
       const res = await api.delete(`/letters/${payload}`, payload);
       thunkAPI.dispatch(__getLetters());
       return thunkAPI.fulfillWithValue(res.data);
     } catch (error) {
-      console.log("오류다 ", error);
       return thunkAPI.rejectWithValue(error);
     }
   }
@@ -58,7 +48,6 @@ export const __deleteLetters = createAsyncThunk(
 export const __editLetters = createAsyncThunk(
   "editLetters ",
   async (payload, thunkAPI) => {
-    //수행하고 싶은 동작 : 레터를 추가하기
     try {
       const res = await api.patch(`/letters/${payload.id}`, {
         content: payload.editingText,
@@ -69,6 +58,7 @@ export const __editLetters = createAsyncThunk(
     }
   }
 );
+
 const lettersSlice = createSlice({
   name: "letters",
   initialState,
@@ -126,7 +116,6 @@ const lettersSlice = createSlice({
       const editLetter = state.letters.findIndex((letter) => {
         return letter.id === action.payload.id;
       });
-      console.log("에디트 레터다 ", editLetter);
       state.letters.splice(editLetter, 1, action.payload);
 
       state.isLoading = false;
@@ -141,5 +130,3 @@ const lettersSlice = createSlice({
 });
 export default lettersSlice.reducer;
 export const { addLetter, deleteLetter, editLetter } = lettersSlice.actions;
-
-// export default letters;
