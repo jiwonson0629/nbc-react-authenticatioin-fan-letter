@@ -2,6 +2,7 @@ import axios from "axios";
 // 머니풀 , 유저 토큰, 아이디 등
 export const instance = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
+  timeout: 2000,
 });
 instance.interceptors.request.use(
   // 요청을 보내기 전 수행되는 함수

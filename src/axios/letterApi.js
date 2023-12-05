@@ -2,10 +2,13 @@ import axios from "axios";
 // 로컬호스트 : 레터내역
 const instance = axios.create({
   baseURL: process.env.REACT_APP_LETTERS_URL,
+  timeout: 2000,
 });
 instance.interceptors.request.use(
   // 요청을 보내기 전 수행되는 함수
   function (config) {
+    // 내부에 원하는 로직을 채운 후 리턴함
+    // ex. 토큰, 헤더 넣기 등
     console.log("인터셉터 요청 성공!");
     return config;
   },
